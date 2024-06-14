@@ -1,0 +1,835 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={RMHI/ARMP Problem Set 1},
+  pdfauthor={Koquiun Li Lin 1319881 {[}Word Count: 1142{]}},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{RMHI/ARMP Problem Set 1}
+\author{Koquiun Li Lin 1319881 {[}Word Count: 1142{]}}
+\date{}
+
+\begin{document}
+\maketitle
+
+Please put your answers here, following the instructions in the
+assignment description. Put your answers and word count tallies in the
+locations indicated; if none is indicated that means there is no word
+count for that question. Remember to knit as you go, and submit the
+knitted version of this on Canvas.
+
+\hypertarget{q1}{%
+\subsection{Q1}\label{q1}}
+
+\textbf{Q1a}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\FunctionTok{table}\NormalTok{(d}\SpecialCharTok{$}\NormalTok{level, d}\SpecialCharTok{$}\NormalTok{talent)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              
+##               comedy dancing instrument magic other singing
+##   fun              3       4          3     2     2       8
+##   competitive      5       3          3     4     0       5
+\end{verbatim}
+
+\textbf{Q1b}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\NormalTok{d}\SpecialCharTok{$}\NormalTok{talent }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(d}\SpecialCharTok{$}\NormalTok{talent, }\AttributeTok{levels=}\FunctionTok{c}\NormalTok{(}\StringTok{"singing"}\NormalTok{,}\StringTok{"dancing"}\NormalTok{,}\StringTok{"instrument"}\NormalTok{,}\StringTok{"comedy"}\NormalTok{,}\StringTok{"magic"}\NormalTok{,}\StringTok{"other"}\NormalTok{))}
+\FunctionTok{table}\NormalTok{(d}\SpecialCharTok{$}\NormalTok{talent)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##    singing    dancing instrument     comedy      magic      other 
+##         13          7          6          8          6          2
+\end{verbatim}
+
+\emph{ANSWER: The most common talent was singing, with 13 performances.}
+
+\textbf{Q1c}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\FunctionTok{colnames}\NormalTok{(d)[}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"species"}
+\FunctionTok{head}\NormalTok{(d)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 6
+##   name   species level       talent  audience judge
+##   <fct>  <fct>   <fct>       <fct>      <dbl> <dbl>
+## 1 gladly bear    competitive singing        8     2
+## 2 gladly bear    fun         dancing        9    NA
+## 3 panda  bear    fun         dancing        8    NA
+## 4 snowy  bear    fun         singing        7    NA
+## 5 bunny  bunny   competitive magic          8     2
+## 6 bunny  bunny   fun         comedy        10    NA
+\end{verbatim}
+
+\hypertarget{q2}{%
+\subsection{Q2}\label{q2}}
+
+\textbf{Q2a}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\NormalTok{d[(d}\SpecialCharTok{$}\NormalTok{judge}\SpecialCharTok{==}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ d}\SpecialCharTok{$}\NormalTok{judge}\SpecialCharTok{==}\DecValTok{2}\NormalTok{) }\SpecialCharTok{\&}\NormalTok{ d}\SpecialCharTok{$}\NormalTok{audience}\SpecialCharTok{\textgreater{}=}\DecValTok{8}\NormalTok{,]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 26 x 6
+##    name        species level       talent  audience judge
+##    <fct>       <fct>   <fct>       <fct>      <dbl> <dbl>
+##  1 gladly      bear    competitive singing        8     2
+##  2 <NA>        <NA>    <NA>        <NA>          NA    NA
+##  3 <NA>        <NA>    <NA>        <NA>          NA    NA
+##  4 bunny       bunny   competitive magic          8     2
+##  5 <NA>        <NA>    <NA>        <NA>          NA    NA
+##  6 cuddly paws bunny   competitive dancing        8     1
+##  7 <NA>        <NA>    <NA>        <NA>          NA    NA
+##  8 flopsy      bunny   competitive singing       10     1
+##  9 <NA>        <NA>    <NA>        <NA>          NA    NA
+## 10 <NA>        <NA>    <NA>        <NA>          NA    NA
+## # i 16 more rows
+\end{verbatim}
+
+\textbf{Q2b}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\NormalTok{d }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{((judge}\SpecialCharTok{==}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ judge}\SpecialCharTok{==}\DecValTok{2}\NormalTok{),}
+\NormalTok{         audience}\SpecialCharTok{\textgreater{}=}\DecValTok{8}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 6
+##   name        species level       talent  audience judge
+##   <fct>       <fct>   <fct>       <fct>      <dbl> <dbl>
+## 1 gladly      bear    competitive singing        8     2
+## 2 bunny       bunny   competitive magic          8     2
+## 3 cuddly paws bunny   competitive dancing        8     1
+## 4 flopsy      bunny   competitive singing       10     1
+## 5 lfb         bunny   competitive comedy         8     1
+## 6 shadow      bunny   competitive magic          9     1
+\end{verbatim}
+
+\textbf{Q2c}
+
+\emph{ANSWER: Put your answer here. {[}Word count: 105{]}}
+
+The difference in the outputs arises from the way missing values are
+treated in base R and tidyverse. In base R, during logical operations
+involving NA values on the conditions ``judge'' and ``audience'', the
+result will also be NA for rows where the operands contain NA. These
+rows are not removed, and will appear in the output. On the contrary,
+tidyverse functions like filter() excludes rows by default where the
+filtering condition evaluates to NA, so if either the condition on
+``judge'' or ``audience'' evaluates to NA for a row, that row is
+excluded from the filtered output, leading to fewer rows in the output.
+
+\textbf{Q2d}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\NormalTok{remove\_NA }\OtherTok{\textless{}{-}} \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(d}\SpecialCharTok{$}\NormalTok{judge) }\SpecialCharTok{\&} \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(d}\SpecialCharTok{$}\NormalTok{audience)}
+\NormalTok{d[(d}\SpecialCharTok{$}\NormalTok{judge}\SpecialCharTok{==}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ d}\SpecialCharTok{$}\NormalTok{judge}\SpecialCharTok{==}\DecValTok{2}\NormalTok{) }\SpecialCharTok{\&}\NormalTok{ d}\SpecialCharTok{$}\NormalTok{audience}\SpecialCharTok{\textgreater{}=}\DecValTok{8} \SpecialCharTok{\&}\NormalTok{ remove\_NA,]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 6
+##   name        species level       talent  audience judge
+##   <fct>       <fct>   <fct>       <fct>      <dbl> <dbl>
+## 1 gladly      bear    competitive singing        8     2
+## 2 bunny       bunny   competitive magic          8     2
+## 3 cuddly paws bunny   competitive dancing        8     1
+## 4 flopsy      bunny   competitive singing       10     1
+## 5 lfb         bunny   competitive comedy         8     1
+## 6 shadow      bunny   competitive magic          9     1
+\end{verbatim}
+
+\hypertarget{q3}{%
+\subsection{Q3}\label{q3}}
+
+\textbf{Q3a}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\NormalTok{dshort }\OtherTok{\textless{}{-}}\NormalTok{ d }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(judge,audience))}
+\NormalTok{dshort}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 42 x 4
+##    name        species level       talent    
+##    <fct>       <fct>   <fct>       <fct>     
+##  1 gladly      bear    competitive singing   
+##  2 gladly      bear    fun         dancing   
+##  3 panda       bear    fun         dancing   
+##  4 snowy       bear    fun         singing   
+##  5 bunny       bunny   competitive magic     
+##  6 bunny       bunny   fun         comedy    
+##  7 cuddly paws bunny   competitive dancing   
+##  8 cuddly paws bunny   fun         instrument
+##  9 flopsy      bunny   competitive singing   
+## 10 flopsy      bunny   fun         instrument
+## # i 32 more rows
+\end{verbatim}
+
+\textbf{Q3b}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\NormalTok{d2 }\OtherTok{\textless{}{-}}\NormalTok{ dshort }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =} \StringTok{"level"}\NormalTok{,}\AttributeTok{values\_from =} \StringTok{"talent"}\NormalTok{)}
+\NormalTok{d2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 23 x 4
+##    name        species competitive fun       
+##    <fct>       <fct>   <fct>       <fct>     
+##  1 gladly      bear    singing     dancing   
+##  2 panda       bear    <NA>        dancing   
+##  3 snowy       bear    <NA>        singing   
+##  4 bunny       bunny   magic       comedy    
+##  5 cuddly paws bunny   dancing     instrument
+##  6 flopsy      bunny   singing     instrument
+##  7 giganticky  bunny   magic       dancing   
+##  8 lfb         bunny   comedy      singing   
+##  9 pink bunny  bunny   instrument  singing   
+## 10 shadow      bunny   magic       other     
+## # i 13 more rows
+\end{verbatim}
+
+\textbf{Q3c}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# optional code here}
+\NormalTok{d2\_modify }\OtherTok{\textless{}{-}}\NormalTok{ d }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =} \StringTok{"level"}\NormalTok{,}\AttributeTok{values\_from =} \StringTok{"talent"}\NormalTok{)}
+\NormalTok{d2\_modify}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 42 x 6
+##    name        species audience judge competitive fun       
+##    <fct>       <fct>      <dbl> <dbl> <fct>       <fct>     
+##  1 gladly      bear           8     2 singing     <NA>      
+##  2 gladly      bear           9    NA <NA>        dancing   
+##  3 panda       bear           8    NA <NA>        dancing   
+##  4 snowy       bear           7    NA <NA>        singing   
+##  5 bunny       bunny          8     2 magic       <NA>      
+##  6 bunny       bunny         10    NA <NA>        comedy    
+##  7 cuddly paws bunny          8     1 dancing     <NA>      
+##  8 cuddly paws bunny          9    NA <NA>        instrument
+##  9 flopsy      bunny         10     1 singing     <NA>      
+## 10 flopsy      bunny         10    NA <NA>        instrument
+## # i 32 more rows
+\end{verbatim}
+
+\emph{ANSWER: Put your answer here. {[}Word count: 106{]}}
+
+The difference in the outputs when using d and dshort with the
+pivot\_wider function is indeed due to the presence of NA values. When
+using a dataset like d that includes NA values, pivot\_wider can lead to
+more outputs with NA because it treats NA as a valid level of a factor,
+creating additional columns for NA values. On the other hand, dshort
+does include columns where there are NA values. However, pivot\_wider
+will generate NA values in the output if there is a mismatch in
+key-value pairs. This results in fewer outputs and a smaller tibble
+because there are fewer factor levels to pivot on.
+
+\textbf{Q3d}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\NormalTok{d2 }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(competitive }\SpecialCharTok{==}\NormalTok{ fun }\SpecialCharTok{|} \FunctionTok{is.na}\NormalTok{(competitive) }\SpecialCharTok{|} \FunctionTok{is.na}\NormalTok{(fun))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 4
+##   name     species competitive fun    
+##   <fct>    <fct>   <fct>       <fct>  
+## 1 panda    bear    <NA>        dancing
+## 2 snowy    bear    <NA>        singing
+## 3 tweak    cat     singing     singing
+## 4 barky    dog     comedy      <NA>   
+## 5 quackers duck    comedy      comedy 
+## 6 monkey   monkey  <NA>        singing
+\end{verbatim}
+
+\emph{ANSWER: The names of the individuals who broke Rule 1 (i.e., that
+everybody needs to participate in both fun and competitive levels) are
+panda, snowy, barky and monkey. The names of the individuals who broke
+Rule 2 (i.e., that everybody must to do different kinds of talent at the
+fun and competitive levels) are tweak and quackers.}
+
+\hypertarget{q4}{%
+\subsection{Q4}\label{q4}}
+
+\textbf{Q4a}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\NormalTok{d }\OtherTok{\textless{}{-}}\NormalTok{ d }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(name)}
+\NormalTok{d}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 42 x 6
+##    name        species  level       talent     audience judge
+##    <fct>       <fct>    <fct>       <fct>         <dbl> <dbl>
+##  1 barky       dog      competitive comedy            7     3
+##  2 black       dog      competitive dancing           7     3
+##  3 black       dog      fun         comedy            9    NA
+##  4 bunny       bunny    competitive magic             8     2
+##  5 bunny       bunny    fun         comedy           10    NA
+##  6 cuddly paws bunny    competitive dancing           8     1
+##  7 cuddly paws bunny    fun         instrument        9    NA
+##  8 doggie      dog      competitive comedy           NA     2
+##  9 doggie      dog      fun         singing           9    NA
+## 10 douglas     hedgehog competitive singing           9     3
+## # i 32 more rows
+\end{verbatim}
+
+\textbf{Q4b}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\NormalTok{d\_full }\OtherTok{\textless{}{-}} \FunctionTok{full\_join}\NormalTok{(d, dd)}
+\NormalTok{d\_full}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 42 x 7
+##    name        species  level       talent     audience judge duration
+##    <fct>       <fct>    <fct>       <chr>         <dbl> <dbl>    <dbl>
+##  1 barky       dog      competitive comedy            7     3     11.6
+##  2 black       dog      competitive dancing           7     3      5.3
+##  3 black       dog      fun         comedy            9    NA      9.9
+##  4 bunny       bunny    competitive magic             8     2      8.9
+##  5 bunny       bunny    fun         comedy           10    NA      8.3
+##  6 cuddly paws bunny    competitive dancing           8     1      4.7
+##  7 cuddly paws bunny    fun         instrument        9    NA      5.5
+##  8 doggie      dog      competitive comedy           NA     2      9.2
+##  9 doggie      dog      fun         singing           9    NA      4.1
+## 10 douglas     hedgehog competitive singing           9     3      4.4
+## # i 32 more rows
+\end{verbatim}
+
+\textbf{Q4c}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# This code has been given to you, you just need to run it}
+\NormalTok{dc }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(d,dd)}
+\FunctionTok{head}\NormalTok{(dc)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          name species       level  talent audience judge    name       level
+## 1       barky     dog competitive  comedy        7     3   barky competitive
+## 2       black     dog competitive dancing        7     3   black         fun
+## 3       black     dog         fun  comedy        9    NA   bunny         fun
+## 4       bunny   bunny competitive   magic        8     2  doggie competitive
+## 5       bunny   bunny         fun  comedy       10    NA     lfb competitive
+## 6 cuddly paws   bunny competitive dancing        8     1 paw paw competitive
+##   talent duration
+## 1 comedy     11.6
+## 2 comedy      9.9
+## 3 comedy      8.3
+## 4 comedy      9.2
+## 5 comedy      8.9
+## 6 comedy      9.0
+\end{verbatim}
+
+\emph{ANSWER: Put your answer here. {[}Word count: 87{]}}
+
+The output from cbind() results in more columns, totaling 10, whereas
+full\_join() yields only 7 columns. Additionally, the tibble after using
+cbind() contains 3 repeated columns: ``name'', ``level'', and
+``talent'', whereas the columns after using full\_join() are all unique.
+These differences arise because cbind() simply combines tibbles,
+preserving the original row order from the first tibble and then
+appending the second tibble. In contrast, full\_join() performs a
+relational join operation, combining rows based on matching key columns
+and ensuring that values in common columns are aligned correctly.
+
+\hypertarget{q5}{%
+\subsection{Q5}\label{q5}}
+
+\textbf{Q5a}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\NormalTok{df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{durType =} \FunctionTok{case\_when}\NormalTok{(duration}\SpecialCharTok{\textgreater{}}\DecValTok{10} \SpecialCharTok{\textasciitilde{}} \StringTok{"long"}\NormalTok{,}
+\NormalTok{                             duration}\SpecialCharTok{\textless{}}\DecValTok{5} \SpecialCharTok{\textasciitilde{}} \StringTok{"short"}\NormalTok{,}
+                             \ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \StringTok{"medium"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 42 x 8
+##    name        species  level       talent     audience judge duration durType
+##    <chr>       <chr>    <chr>       <chr>         <dbl> <dbl>    <dbl> <chr>  
+##  1 barky       dog      competitive comedy            7     3     11.6 long   
+##  2 black       dog      competitive dancing           7     3      5.3 medium 
+##  3 black       dog      fun         comedy            9    NA      9.9 medium 
+##  4 bunny       bunny    competitive magic             8     2      8.9 medium 
+##  5 bunny       bunny    fun         comedy           10    NA      8.3 medium 
+##  6 cuddly paws bunny    competitive dancing           8     1      4.7 short  
+##  7 cuddly paws bunny    fun         instrument        9    NA      5.5 medium 
+##  8 doggie      dog      competitive comedy           NA     2      9.2 medium 
+##  9 doggie      dog      fun         singing           9    NA      4.1 short  
+## 10 douglas     hedgehog competitive singing           9     3      4.4 short  
+## # i 32 more rows
+\end{verbatim}
+
+\textbf{Q5b}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\NormalTok{ds }\OtherTok{\textless{}{-}}\NormalTok{ df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(talent) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{medAud =} \FunctionTok{round}\NormalTok{(}\FunctionTok{median}\NormalTok{(audience,}\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}\DecValTok{2}\NormalTok{),}
+            \AttributeTok{mnAud =} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(audience,}\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}\DecValTok{2}\NormalTok{),}
+            \AttributeTok{sdAud =} \FunctionTok{round}\NormalTok{(}\FunctionTok{sd}\NormalTok{(audience,}\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}\DecValTok{2}\NormalTok{),}
+            \AttributeTok{n =} \FunctionTok{n}\NormalTok{(),}
+            \AttributeTok{sderrAud =} \FunctionTok{round}\NormalTok{(sdAud}\SpecialCharTok{/}\FunctionTok{sqrt}\NormalTok{(}\FunctionTok{length}\NormalTok{(audience)),}\DecValTok{3}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ungroup}\NormalTok{()}
+\NormalTok{ds}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 6
+##   talent     medAud mnAud sdAud     n sderrAud
+##   <chr>       <dbl> <dbl> <dbl> <int>    <dbl>
+## 1 comedy        9    8.29  1.8      8    0.636
+## 2 dancing       8    8     1.29     7    0.488
+## 3 instrument    7    7.5   1.76     6    0.719
+## 4 magic         8.5  7.33  2.73     6    1.12 
+## 5 other         7.5  7.5   3.54     2    2.50 
+## 6 singing       9    8.5   1.31    13    0.363
+\end{verbatim}
+
+\textbf{Q5c}
+
+\emph{ANSWER: Put your answer here. {[}Word count: 90{]}}
+
+Based on the mean audience ratings, ``magic'' is the least popular, and
+based on the median audience ratings, ``instrument'' is the least
+popular.
+
+In the talent show data, despite the presence of other higher ratings,
+the mean rating for ``magic'' is heavily influenced by the extreme value
+3, which pulls down the central tendency indicated by the mean. On the
+other hand, the median rating for ``instrument'' accurately captures
+central tendency by finding the middle value in the ordered dataset. By
+disregarding extreme values, the median provides a more robust measure
+of central tendency.
+
+\hypertarget{q6}{%
+\subsection{Q6}\label{q6}}
+
+\textbf{Q6a}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\NormalTok{d6 }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ talent, }\AttributeTok{y =}\NormalTok{ mnAud, }\AttributeTok{fill =}\NormalTok{ talent)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{(}\AttributeTok{alpha=}\FloatTok{0.5}\NormalTok{,}\AttributeTok{show.legend=}\ConstantTok{FALSE}\NormalTok{,}\AttributeTok{colour=}\StringTok{"black"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_jitter}\NormalTok{(}\AttributeTok{data=}\NormalTok{d\_full,}\AttributeTok{mapping=}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{talent,}\AttributeTok{y=}\NormalTok{audience,}\AttributeTok{color=}\NormalTok{talent),}
+              \AttributeTok{alpha=}\FloatTok{0.7}\NormalTok{ ,}\AttributeTok{show.legend=}\ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_errorbar}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{ymin =}\NormalTok{ mnAud }\SpecialCharTok{{-}}\NormalTok{ sderrAud, }
+                    \AttributeTok{ymax =}\NormalTok{ mnAud }\SpecialCharTok{+}\NormalTok{ sderrAud), }\AttributeTok{width=}\FloatTok{0.2}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette=}\StringTok{"Set1"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_colour\_brewer}\NormalTok{(}\AttributeTok{palette=}\StringTok{"Set1"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{level, }\AttributeTok{scales=}\StringTok{"free"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Audience rating for each kind of talent"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Talent"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Rating (higher=better)"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{hjust=}\DecValTok{1}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_y\_continuous}\NormalTok{(}\AttributeTok{breaks =} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{by =} \DecValTok{5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{1319881-pset1_files/figure-latex/q6a-1.pdf}
+
+\textbf{Q6b}
+
+\emph{ANSWER: Put your answer here. {[}Word count: 119{]}}
+
+The audience ratings for different types of talent vary between the
+``competitive'' and ``fun'' categories. In both categories, comedy seems
+to be the most appreciated talent, receiving the highest ratings. This
+could suggest that regardless of the context, comedy is universally
+enjoyed by the audience; Dancing and instrument also receive high
+ratings in both categories, indicating that these talents are
+well-received in both competitive and fun settings; Magic receives a
+lower rating in the fun category but fares better in the competitive
+category. This might suggest that the audience enjoys magic more when
+it's presented in a competitive, more intense and serious context;
+Singing receives moderate ratings in both categories, suggesting that
+it's neither exceptionally well-received nor poorly received.
+
+\hypertarget{q7}{%
+\subsection{Q7}\label{q7}}
+
+\textbf{Q7a}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\NormalTok{df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{duration,}\AttributeTok{fill=}\NormalTok{level)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_density}\NormalTok{(}\AttributeTok{alpha=}\FloatTok{0.6}\NormalTok{,}\AttributeTok{color =} \StringTok{"black"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Density plot in terms of level\textquotesingle{}s duration"}\NormalTok{,}
+     \AttributeTok{x =} \StringTok{"Duration"}\NormalTok{,}
+     \AttributeTok{y =} \StringTok{"Density"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{1319881-pset1_files/figure-latex/q7a-1.pdf}
+
+\textbf{Q7b}
+
+\emph{ANSWER: (1) Describe one new thing here. (2) Describe other new
+thing here. {[}Word count: 32{]}}
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\tightlist
+\item
+  I changed the plot's overall theme to minimal style by adding
+  theme\_minimal() after geom\_density.
+\item
+  I adjusted the font size to 14 points of text elements by using
+  theme(text = element\_text(size = 14)).
+\end{enumerate}
+
+\textbf{Q7c}
+
+\emph{ANSWER: Put your answer here. {[}Word count: 129{]}}
+
+The density plot displays the distribution of duration for ``fun'' and
+``competitive'' levels. The x-axis shows the duration, and the y-axis
+shows the density. The ``fun'' level shows a single peak around 5
+minutes, indicating most ``fun'' levels have a duration close to this
+value. The ``competitive'' level shows a bimodal distribution with peaks
+around 5 and 10 minutes, suggesting two common durations for it. The
+higher peak for ``competitive'' levels is 5 minutes, similar to the peak
+for ``fun'' levels, implying a popular shorter duration for both level
+types. However, the second peak for ``competitive'' levels around 10
+minutes indicates some competitive levels have a longer duration. The
+plot also shows a small density for ``fun'' levels beyond 15 minutes,
+suggesting a few outliers with extremely long durations.
+
+\hypertarget{q8}{%
+\subsection{Q8}\label{q8}}
+
+\emph{ANSWER: Put your answer here. {[}Word count: 71{]}}
+
+Gladly's interpretation of the p-value is incorrect. A p-value is not a
+definitive proof of truth of the null hypothesis. Instead, it represents
+the probability of observing the test statistic if the null hypothesis
+is true. Moreover, changing the alpha threshold after obtaining the
+data, known as ``p-hacking'', is problematic. It increases the Type I
+error rate and undermines the integrity of the statistical test, which
+can lead to incorrect conclusions.
+
+\hypertarget{q9}{%
+\subsection{Q9}\label{q9}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# get the lowest score}
+\NormalTok{lowest }\OtherTok{\textless{}{-}} \FunctionTok{min}\NormalTok{(d}\SpecialCharTok{$}\NormalTok{audience,}\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{lowest}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# get the highest score}
+\NormalTok{highest }\OtherTok{\textless{}{-}} \FunctionTok{max}\NormalTok{(d}\SpecialCharTok{$}\NormalTok{audience,}\AttributeTok{na.rm=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{highest}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+\textbf{Q9a}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Put your code here}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{10}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FloatTok{0.7}
+
+\NormalTok{probLowest }\OtherTok{\textless{}{-}} \FunctionTok{dbinom}\NormalTok{(}\AttributeTok{x=}\NormalTok{lowest, }\AttributeTok{size=}\NormalTok{n, }\AttributeTok{prob=}\NormalTok{p)}
+\NormalTok{probHighest }\OtherTok{\textless{}{-}} \FunctionTok{dbinom}\NormalTok{(}\AttributeTok{x=}\NormalTok{highest, }\AttributeTok{size=}\NormalTok{n, }\AttributeTok{prob=}\NormalTok{p)}
+
+\NormalTok{probLowest }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(probLowest }\SpecialCharTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{probLowest}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.9
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{probHighest }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(probHighest }\SpecialCharTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{probHighest}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2.8
+\end{verbatim}
+
+\emph{ANSWER: The probability of the lowest score is 0.9\% and the
+probability of the highest score is 2.8\%.}
+
+\textbf{Q9b}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# this code is given}
+\NormalTok{df }\OtherTok{\textless{}{-}}\NormalTok{ df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{prob =} \FunctionTok{pnorm}\NormalTok{(duration,}\AttributeTok{mean=}\FloatTok{6.5}\NormalTok{,}\AttributeTok{sd=}\DecValTok{3}\NormalTok{))}
+
+\CommentTok{\# you may add additional code here if it\textquotesingle{}s useful to answer the question}
+\NormalTok{df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{duration)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha=}\FloatTok{0.6}\NormalTok{,}\AttributeTok{color =} \StringTok{"black"}\NormalTok{, }\AttributeTok{binwidth =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{1319881-pset1_files/figure-latex/q9b-1.pdf}
+
+\emph{ANSWER: Put your answer here. {[}Word count: 93{]}}
+
+The variable ``prob'' represents the probability of observing a
+``duration'' value under the assumption that the true average duration
+is 6.5 minutes with a standard deviation of 3 minutes, while p-value is
+the probability of finding an observed test statistic, under the
+assumption that the null hypothesis is true. From the idea, we can get
+that p-value = 1 - prob, indicating that when prob is larger, p-value is
+smaller, vice versa. From the plot, we can identify that there is a data
+point significant different from previous averages, which is greater
+than 15.
+
+\textbf{Q9c}
+
+\emph{ANSWER: Put your answer here. {[}Word count: 123{]}}
+
+No, we cannot draw conclusions about the significance of the entire
+variable duration based on a single calculation combining only the
+individual prob values. The prob values alone do not provide
+comprehensive insights into the distribution, variance, or other
+statistical characteristics of the duration data. They are just
+individual probabilities associated with each data point and do not
+reflect the overall behavior of the duration data. Moreover, this
+approach ignores the potential influence of other variables in the
+dataset on duration. These variables could also have significant
+interactions with duration that are not captured by looking at prob
+values alone. Therefore, extra information such as the descriptive
+statistics and the correlation coefficient could be helpful in analyzing
+the relationship between duration and prob.
+
+\hypertarget{q10}{%
+\subsection{Q10}\label{q10}}
+
+\textbf{Q10a}
+
+\emph{ANSWER: Put your answer here. {[}Word count: 90{]}}
+
+A sampling distribution represents the probability distribution of a
+statistic obtained from a large number of samples drawn from a
+population. The true distribution of audience ratings increases linearly
+from 0 to 10. This indicates that higher ratings are more probable than
+lower ones. Consequently, in a single timeslot consisting of 30
+performances, we expect the range of ratings to be skewed towards higher
+values. Panel X best reflects this expected distribution with its
+increasing curve, aligning with the true distribution of ratings and the
+anticipated skew towards higher values.
+
+\textbf{Q10b}
+
+\emph{ANSWER: Put your answer here. {[}Word count: 97{]}}
+
+With a uniform distribution of audience ratings, ranging from 0 to 10
+across 30 performances, each range is equally likely. The sampling
+distribution of the range is expected to be approximately symmetric and
+bell-shaped due to large sample sizes, making panel V the optimal
+choice.
+
+If the true distribution changes, both the sampling distribution of the
+range and the mean will change accordingly. However, the mean is
+influenced by every value and is sensitive to outliers, while the range
+is determined by the extreme values and can vary widely if the true
+distribution has a large spread.
+
+\hypertarget{q11}{%
+\subsection{Q11}\label{q11}}
+
+\emph{ANSWER: Put your answer here. Does not contribute to your word
+count limit.}
+
+In Bunnyland, everyone is hungry because they have all performed
+multiple talents, which consumed their energy, so they need tons of
+food.
+
+\end{document}

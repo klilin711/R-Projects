@@ -1,0 +1,363 @@
+---
+title: "RMHI/ARMP Problem Set 1"
+author: 'Koquiun Li Lin 1319881 [Word Count: 1128]'
+output:
+  word_document: default
+  pdf_document: default
+---
+
+Please put your answers here, following the instructions in the assignment description. Put your answers and word count tallies in the locations indicated; if none is indicated that means there is no word count for that question. Remember to knit as you go, and submit the knitted version of this on Canvas.
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+# We'll begin by loading up the libraries and data we need, as always.
+knitr::opts_chunk$set(echo = TRUE)
+
+# this deletes any variables that are in your environment
+# useful so you don't get conflicts you're unaware of
+rm(list=ls())
+
+# loading the libraries
+library(tidyverse)
+library(here)
+library(ggplot2)
+library(RColorBrewer)
+
+d <- read_csv(file=here("talentshow.csv"))
+dd <- read_csv(file=here("talentshow_duration.csv"))
+
+# these tibbles may be useful in some of the questions
+d3b <- read_csv(file=here("d3b.csv"))
+d6 <- read_csv(file=here("d6.csv"))
+df <- read_csv(file=here("dfullMine.csv"))
+
+# makes into factors
+d$name <- as.factor(d$name)
+dd$name <- as.factor(dd$name)
+d$kind <- as.factor(d$kind)
+
+# reorders so fun comes before competitive, makes figure nicer
+d$level <- factor(d$level, levels=c("fun","competitive"))
+dd$level <- factor(dd$level, levels=c("fun","competitive"))
+```
+
+## Q1 
+
+**Q1a**
+
+```{r q1a, warning=FALSE, message=FALSE}
+# Put your code here
+table(d$level, d$talent)
+```
+
+**Q1b**
+
+```{r q1b, warning=FALSE, message=FALSE}
+# Put your code here
+d$talent <- factor(d$talent, levels=c("singing","dancing","instrument","comedy","magic","other"))
+table(d$talent)
+```
+
+*ANSWER: The most common talent was singing, with 13 performances.*
+
+
+**Q1c** 
+
+```{r q1c, warning=FALSE, message=FALSE}
+# Put your code here
+colnames(d)[2] <- "species"
+head(d)
+```
+
+
+## Q2 
+
+**Q2a**
+
+```{r q2a, warning=FALSE, message=FALSE}
+# Put your code here
+d[(d$judge==1 | d$judge==2) & d$audience>=8,]
+```
+
+**Q2b**
+
+```{r q2b, warning=FALSE, message=FALSE}
+# Put your code here
+d %>%
+  filter((judge==1 | judge==2),
+         audience>=8)
+```
+
+**Q2c**
+
+*ANSWER: Put your answer here. [Word count: 98]* 
+
+The difference in the outputs arises from the way missing values are treated in base R and tidyverse. In base R, during logical operations involving NA values on the conditions "judge" and "audience", the result will also be NA for rows where the operands contain NA. These rows are not removed, and will appear in the output. On the contrary, tidyverse functions like filter() excludes rows by default where the filtering condition evaluates to NA, so if either the condition on "judge" or "audience" evaluates to NA for a row, that row is excluded from the filtered output.
+
+**Q2d**
+
+```{r q2d, warning=FALSE, message=FALSE}
+# Put your code here
+remove_NA <- !is.na(d$judge) & !is.na(d$audience)
+d[(d$judge==1 | d$judge==2) & d$audience>=8 & remove_NA,]
+```
+
+
+## Q3
+
+**Q3a**
+
+```{r q3a, warning=FALSE, message=FALSE}
+# Put your code here
+dshort <- d %>%
+  select(-c(judge,audience))
+dshort
+```
+
+**Q3b**
+
+```{r q3b, warning=FALSE, message=FALSE}
+# Put your code here
+d2 <- dshort %>%
+  pivot_wider(names_from = "level",values_from = "talent")
+d2
+```
+
+**Q3c**
+
+```{r q3c, warning=FALSE, message=FALSE}
+# optional code here
+d2_modify <- d %>%
+  pivot_wider(names_from = "level",values_from = "talent")
+d2_modify
+```
+
+*ANSWER: Put your answer here. [Word count: 96]* 
+
+The difference in the outputs when using d and dshort with the pivot_wider function is indeed due to the presence of NA values. When using a dataset like d that includes NA values, pivot_wider can lead to more outputs with NA because it treats NA as a valid level of a factor. On the other hand, dshort does not include NA values, but pivot_wider will generate NA values in the output if there is a mismatch in key-value pairs. This occurs because there are fewer factor levels to pivot on in the absence of NA values.
+
+**Q3d**
+
+```{r q3d, warning=FALSE, message=FALSE}
+# Put your code here
+d2 %>%
+  filter(competitive == fun | is.na(competitive) | is.na(fun))
+```
+
+*ANSWER: The names of the individuals who broke Rule 1 (i.e., that everybody needs to participate in both fun and competitive levels) are panda, snowy, barky and monkey. The names of the individuals who broke Rule 2 (i.e., that everybody must to do different kinds of talent at the fun and competitive levels) are tweak and quackers.*
+
+
+## Q4
+
+**Q4a**
+
+```{r q4a, warning=FALSE, message=FALSE}
+# Put your code here
+d <- d %>%
+  arrange(name)
+d
+```
+
+**Q4b**
+
+```{r q4b, warning=FALSE, message=FALSE}
+# Put your code here
+d_full <- full_join(d, dd)
+d_full
+```
+
+**Q4c**
+
+```{r q4c, warning=FALSE, message=FALSE}
+# This code has been given to you, you just need to run it
+dc <- cbind(d,dd)
+head(dc)
+```
+
+*ANSWER: Put your answer here. [Word count: 87]* 
+
+The output from cbind() results in more columns, totaling 10, whereas full_join() yields only 7 columns. Additionally, the tibble after using cbind() contains 3 repeated columns: "name", "level", and "talent", whereas the columns after using full_join() are all unique. These differences arise because cbind() simply combines tibbles, preserving the original row order from the first tibble and then appending the second tibble. In contrast, full_join() performs a relational join operation, combining rows based on matching key columns and ensuring that values in common columns are aligned correctly.
+
+
+## Q5
+
+**Q5a**
+
+```{r q5a, warning=FALSE, message=FALSE}
+# Put your code here
+df %>%
+  mutate(durType = case_when(duration>10 ~ "long",
+                             duration<5 ~ "short",
+                             TRUE ~ "medium"))
+```
+
+**Q5b** 
+
+```{r q5b, warning=FALSE, message=FALSE}
+# Put your code here
+ds <- df %>%
+  group_by(talent) %>%
+  summarise(medAud = round(median(audience,na.rm = TRUE),2),
+            mnAud = round(mean(audience,na.rm = TRUE),2),
+            sdAud = round(sd(audience,na.rm = TRUE),2),
+            n = n(),
+            sderrAud = round(sd(audience,na.rm = TRUE)/sqrt(length(audience)),3)) %>%
+  ungroup()
+ds
+```
+
+**Q5c**
+
+*ANSWER: Put your answer here. [Word count: 90]* 
+
+Based on the mean audience ratings, "magic" is the least popular, and based on the median audience ratings, "instrument" is the least popular. 
+
+In the talent show data, despite the presence of other higher ratings, the mean rating for “magic” is heavily influenced by the extreme value 3, which pulls down the central tendency indicated by the mean. On the other hand, the median rating for “instrument” accurately captures central tendency by finding the middle value in the ordered dataset. By disregarding extreme values, the median provides a more robust measure of central tendency. 
+
+
+## Q6
+
+**Q6a**
+
+```{r q6a, fig.width=7, fig.height=4.5, warning=FALSE, message=FALSE}
+# Put your code here
+d6 %>%
+  ggplot(mapping = aes(x = talent, y = mnAud, fill = talent)) +
+  geom_col(alpha=0.5,show.legend=FALSE,colour="black") + 
+  geom_jitter(data=d_full,mapping=aes(x=talent,y=audience,color=talent),
+              alpha=0.7 ,show.legend=FALSE) +
+  geom_errorbar(aes(ymin = mnAud - sderrAud, 
+                    ymax = mnAud + sderrAud), width=0.2) +
+  scale_fill_brewer(palette="Set1") +
+  scale_colour_brewer(palette="Set1") +
+  facet_wrap(~level, scales="free") +
+  theme_bw() +
+  labs(title = "Audience rating for each kind of talent",
+       x = "Talent",
+       y = "Rating (higher=better)") +
+  theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+  scale_y_continuous(breaks = seq(0, 10, by = 5))
+```
+
+**Q6b**
+
+*ANSWER: Put your answer here. [Word count: 119]* 
+
+The audience ratings for different types of talent vary between the “competitive” and “fun” categories. In both categories, comedy seems to be the most appreciated talent, receiving the highest ratings. This could suggest that regardless of the context, comedy is universally enjoyed by the audience; Dancing and instrument also receive high ratings in both categories, indicating that these talents are well-received in both competitive and fun settings; Magic receives a lower rating in the fun category but fares better in the competitive category. This might suggest that the audience enjoys magic more when it’s presented in a competitive, more intense and serious context; Singing receives moderate ratings in both categories, suggesting that it’s neither exceptionally well-received nor poorly received.
+
+
+## Q7
+
+**Q7a**
+
+```{r q7a, fig.width=8, fig.height=6, warning=FALSE, message=FALSE}
+# Put your code here
+df %>%
+  ggplot(mapping = aes(x=duration,fill=level)) +
+  geom_density(alpha=0.6,color = "black") +
+  theme_minimal() +
+  labs(title = "Density plot in terms of level's duration",
+     x = "Duration",
+     y = "Density") +
+  theme(text = element_text(size = 14))
+```
+
+**Q7b**
+
+*ANSWER: (1) Describe one new thing here. (2) Describe other new thing here. [Word count: 32]*
+
+(1) I changed the plot's overall theme to minimal style by adding theme_minimal() after geom_density.
+(2) I adjusted the font size to 14 points of text elements by using theme(text = element_text(size = 14)).
+
+**Q7c**
+
+*ANSWER: Put your answer here. [Word count: 129]* 
+
+The density plot displays the distribution of duration for "fun" and "competitive" levels. The x-axis shows the duration, and the y-axis shows the density. The "fun" level shows a single peak around 5 minutes, indicating most "fun" levels have a duration close to this value. The "competitive" level shows a bimodal distribution with peaks around 5 and 10 minutes, suggesting two common durations for it. The higher peak for "competitive" levels is 5 minutes, similar to the peak for "fun" levels, implying a popular shorter duration for both level types. However, the second peak for "competitive" levels around 10 minutes indicates some competitive levels have a longer duration. The plot also shows a small density for "fun" levels beyond 15 minutes, suggesting a few outliers with extremely long durations.
+
+
+## Q8
+
+*ANSWER: Put your answer here. [Word count: 71]* 
+
+Gladly’s interpretation of the p-value is incorrect. A p-value is not a definitive proof of truth of the null hypothesis. Instead, it represents the probability of observing the test statistic if the null hypothesis is true. Moreover, changing the alpha threshold after obtaining the data, known as “p-hacking”, is problematic. It increases the Type I error rate and undermines the integrity of the statistical test, which can lead to incorrect conclusions.
+
+
+## Q9
+
+```{r q9codeprovided, warning=FALSE, message=FALSE}
+# get the lowest score
+lowest <- min(d$audience,na.rm=TRUE)
+lowest
+
+# get the highest score
+highest <- max(d$audience,na.rm=TRUE)
+highest
+```
+
+**Q9a**
+
+```{r q9a, warning=FALSE, message=FALSE}
+# Put your code here
+n <- 10
+p <- 0.7
+
+probLowest <- dbinom(x=lowest, size=n, prob=p)
+probHighest <- dbinom(x=highest, size=n, prob=p)
+
+probLowest <- round(probLowest * 100, 1)
+probLowest
+
+probHighest <- round(probHighest * 100, 1)
+probHighest
+```
+
+*ANSWER: The probability of the lowest score is 0.9% and the probability of the highest score is 2.8%.*
+
+
+**Q9b** 
+
+```{r q9b, warning=FALSE, message=FALSE}
+# this code is given
+df <- df %>%
+  mutate(prob = pnorm(duration,mean=6.5,sd=3))
+
+# you may add additional code here if it's useful to answer the question
+df %>%
+  ggplot(mapping = aes(x=duration)) +
+  geom_histogram(alpha=0.6,color = "black", binwidth = 0.5) +
+  theme_bw()
+```
+
+*ANSWER: Put your answer here. [Word count: 96]* 
+
+The variable "prob" represents the probability of observing a "duration" value under the assumption that the true average duration is 6.5 minutes with a standard deviation of 3 minutes, while p-value is the probability of finding an observed test statistic, under the assumption that the null hypothesis is true. From the idea, we can get that p-value = 1 - prob, indicating that when prob is larger, p-value is smaller, vice versa. From the plot, we can identify that there is a data point significantly different from previous averages, with a duration greater than 15 (18.7).
+
+**Q9c**
+
+*ANSWER: Put your answer here. [Word count: 121]* 
+
+No, we cannot draw conclusions about the significance of the entire variable duration based on a single calculation combining only the individual prob values. Although "prob" gives the probability of observing a value less than or equal to the corresponding "duration" value, assuming the data follows a normal distribution with the given parameters, it does not provide enough information to draw conclusions about the significance of the entire "duration" variable or dataset. It just computes individual probabilities. To assess the significance of the "duration" variable, we would need additional information, such as the actual distribution of the "duration" data, specific research questions or hypotheses related to the "duration" variable and some summary statistics (mean, median, standard deviation) of the "duration" data.
+
+
+## Q10
+
+**Q10a**
+
+*ANSWER: Put your answer here. [Word count: 90]* 
+
+A sampling distribution represents the probability distribution of a statistic obtained from a large number of samples drawn from a population. The true distribution of audience ratings increases linearly from 0 to 10. This indicates that higher ratings are more probable than lower ones. Consequently, in a single timeslot consisting of 30 performances, we expect the range of ratings to be skewed towards higher values. Panel X best reflects this expected distribution with its increasing curve, aligning with the true distribution of ratings and the anticipated skew towards higher values. 
+
+**Q10b**
+
+*ANSWER: Put your answer here. [Word count: 99]* 
+
+With a uniform distribution of audience ratings, each rating is equally likely. In this sample, this means that every rating has the same likelihood to appear, having high and low ratings, leading to the range skewing to higher values. Hence, panel X is the optimal choice.
+
+Both the distributions of the sample mean and the sample range will still exhibit central tendency, even if the shape of the true underlying distribution varies. However, the sample distribution of the mean is less variable, while the sample distribution of the range is more variable due to the effect of extreme values.
+
+
+## Q11
+
+*ANSWER: Put your answer here. Does not contribute to your word count limit.*
+
+In Bunnyland, everyone is hungry because they have all performed multiple talents, which consumed their energy, so they need tons of food.

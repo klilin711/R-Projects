@@ -1,0 +1,43 @@
+name,species,level,talent,audience,judge,duration
+barky,dog,competitive,comedy,7,3,11.6
+black,dog,competitive,dancing,7,3,5.3
+black,dog,fun,comedy,9,NA,9.9
+bunny,bunny,competitive,magic,8,2,8.9
+bunny,bunny,fun,comedy,10,NA,8.3
+cuddly paws,bunny,competitive,dancing,8,1,4.7
+cuddly paws,bunny,fun,instrument,9,NA,5.5
+doggie,dog,competitive,comedy,NA,2,9.2
+doggie,dog,fun,singing,9,NA,4.1
+douglas,hedgehog,competitive,singing,9,3,4.4
+douglas,hedgehog,fun,instrument,7,NA,5.6
+flopsy,bunny,competitive,singing,10,1,4.3
+flopsy,bunny,fun,instrument,10,NA,6
+fluffy,cat,competitive,singing,6,NA,4.8
+fluffy,cat,fun,other,5,NA,18.7
+foxy,fox,competitive,dancing,6,2,5.1
+foxy,fox,fun,magic,5,NA,7.4
+froggie,frog,competitive,instrument,5,3,5.7
+froggie,frog,fun,singing,8,NA,4.4
+giganticky,bunny,competitive,magic,10,3,9.3
+giganticky,bunny,fun,dancing,10,NA,2.7
+gladly,bear,competitive,singing,8,2,4.5
+gladly,bear,fun,dancing,9,NA,3
+lfb,bunny,competitive,comedy,8,1,8.9
+lfb,bunny,fun,singing,9,NA,4.6
+monkey,monkey,fun,singing,10,NA,4.2
+panda,bear,fun,dancing,8,NA,3.9
+paw paw,dog,competitive,comedy,5,NA,9
+paw paw,dog,fun,singing,NA,NA,4.1
+pink bunny,bunny,competitive,instrument,7,2,6.2
+pink bunny,bunny,fun,singing,10,NA,4.6
+quackers,duck,competitive,comedy,9,NA,12.2
+quackers,duck,fun,comedy,10,NA,10.1
+shadow,bunny,competitive,magic,9,1,9.4
+shadow,bunny,fun,other,10,NA,1.4
+snowflake,bunny,competitive,magic,9,NA,9.8
+snowflake,bunny,fun,dancing,8,NA,4.5
+snowy,bear,fun,singing,7,NA,4.7
+tweak,cat,competitive,singing,7,NA,4.1
+tweak,cat,fun,singing,9,NA,4.8
+wiggly tail,bunny,competitive,instrument,7,1,6.8
+wiggly tail,bunny,fun,magic,3,NA,7.5
