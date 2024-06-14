@@ -1,0 +1,379 @@
+---
+title: "RMHI/ARMP Problem Set 2"
+author: 'Koquiun Li Lin 1319881 [Word Count: 1630]'
+output: word_document
+---
+
+Please put your answers here, following the instructions in the assignment description. Put your answers and word count tallies in the locations indicated; if none is indicated that means there is no word count for that question. Remember to knit as you go, and submit the knitted version of this on Canvas.
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+# We'll begin by loading up the libraries and data we need, as always.
+knitr::opts_chunk$set(echo = TRUE)
+
+# this deletes any variables that are in your environment
+# useful so you don't get conflicts you're unaware of
+rm(list=ls())
+
+# loading the libraries
+library(tidyverse)
+library(here)
+library(ggplot2)
+library(lsr)
+library(RColorBrewer)
+library(car)
+
+# loading datasets
+ds <- read_csv(file=here("shiftsmonitoring.csv"))
+dl <- read_csv(file=here("testdata.csv"))
+dc <- read_csv(file=here("crimestats.csv"))
+df <- read_csv(file=here("foodprices.csv"))
+dh <- read_csv(file=here("healthratings.csv"))
+
+# makes person variable in `ds` a factor
+ds$person <- as.factor(ds$person)
+
+# reorders so tables are in intuitive order
+dc$crime <- factor(dc$crime,
+                   levels=c("food","tech","vehicles","other"))
+dc$year <- factor(dc$year,levels=c("previous","current"))
+dh$exCat <- factor(dh$exCat,levels=c("low","high"))
+dh$inCat <- factor(dh$inCat,levels=c("poor","rich"))
+```
+
+## Q1
+
+**Q1a**
+
+```{r q1a, message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+ds_sum <- ds %>%
+  group_by(person) %>%
+  summarise(mean = mean(length),
+            sd = sd(length),
+            n = n(),
+            sderr = sd/sqrt(n)) %>%
+  ungroup()
+
+# bar graph with all foods (new data)
+ds_sum %>%
+  ggplot(mapping=aes(x=person,y=mean,fill=person)) +
+  geom_jitter(data=ds,mapping=aes(x=person,y=length,colour=person),alpha=0.7,show.legend=FALSE) +
+  geom_col(colour="black",show.legend=FALSE,alpha=0.5) +
+  geom_errorbar(mapping=aes(ymin = mean-sderr, ymax= mean+sderr),width=0.2) +
+  theme_bw() +
+  scale_fill_brewer(palette="Set1") +
+  scale_colour_brewer(palette="Set1") +
+  labs(title = "Mean length of time spent watching per shift", x="Person", y="Time in seconds spent watching per shift")
+```
+
+
+**Q1b**
+
+```{r q1b, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+#test if the residuals are normally distributed
+model1 <- aov(length ~ person, data=ds)
+shapiro.test(model1$residuals)
+
+#test if the variance is homogeneous
+leveneTest(length ~ person, data=ds)
+```
+
+*Note that the order of these assumptions (i.e., what assumption you put in 1 vs 2) does not matter!* 
+
+*ASSUMPTION 1: Residuals are normally distributed. The Shapiro-Wilk test used is not significant, W=0.97, p=.120, suggesting that it is safe to assume the residuals are normally distributed, since the p-value is greater than 0.05, and therefore the assumption is not violated. [Word Count: 43]*
+
+*ASSUMPTION 2: Variance is homogeneous. The Levene test used is not significant, F(2,57)=0.47, p=.630, suggesting that there is no significant difference in variances among the groups, since the p-value is greater than 0.05, and therefore the assumption is not violated. [Word Count: 44]*
+
+
+**Q1c**
+
+```{r q1c, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+summary(model1)
+etaSquared(model1)
+```
+
+*ANSWER: As the residuals were normally distributed and the variance was homogeneous, we ran a one-way ANOVA. The predictor variable was person, while the outcome variable was length. The statistical test was significant, F(2,57)=15.9, p<.0001, suggesting that there was a significant difference between the three people in the length of time spent watching. Moreover, the effect size (eta-squared) was 0.36, indicating that the grouping based on person explained 36% of the variance in the length of time spent watching. [Word Count: 84]*
+
+
+**Q1d**
+
+```{r q1d, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+library(lsr)
+posthocPairwiseT(x=model1,p.adjust.method="holm")
+```
+
+*ANSWER: The comparison between ScaryBear and BigHippo, as well as between ScaryBear and QuietHorse, yielded significant p-values, both less than .01. These results indicated a significant difference in the mean length of time spent watching between ScaryBear and BigHippo, and between ScaryBear and QuietHorse. [Word count: 43]*
+
+
+## Q2 
+
+**Q2a** 
+
+```{r q2a, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+dl %>%
+  ggplot(mapping=aes(x=lfb,y=foxy)) +
+  geom_point(colour="darkblue",alpha=0.7,size=3) +     
+  theme_bw() +
+  geom_smooth(method="lm") +
+  labs(title = "Relationship between lfb and foxy", 
+       x="lfb", 
+       y="foxy")
+
+cor.test(dl$lfb,dl$foxy)
+```
+
+*ANSWER: To measure the correlation between the answers from LFB and Foxy. We firstly observed the relationship was linear, then conducted a Pearson's correlation test to find the correlation, which was significant, t(38)=10.14, p<.0001, with a correlation coefficient of 0.85. Therefore, the answers exhibited a strong positive relationship. [Word Count: 47]*
+
+
+**Q2b** 
+
+```{r q2b, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+model2 <- lm(lfb ~ foxy,data=dl)
+summary(model2)
+```
+
+*ANSWER: (i) The p-value (2.31e-12) is the same for the correlation and the linear regression; The t-value (10.141) in correlation is the same as the t-value of "foxy" in linear regression; (ii) The parameter "residual R-squared" of linear regression is related to the correlation coefficient r. Residual R-squared is a measure of effect size, calculated as (1 - SSr/SStot), where SSr is the deviation between predictions and actual values, and SStot represents the total variability in the outcome; (iii) Linear regression provides additional insights by estimating the slope and intercept parameters. The slope quantifies how the outcome variable changes with each unit change in the predictor variable, while the intercept represents the value of the outcome variable when the predictor variable is zero. [Word Count: 121]*
+
+
+**Q2c**
+
+```{r q2c, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+library(lsr)
+standardCoefs(model2)
+```
+
+*ANSWER: The standardised coefficient is 0.855.*
+
+
+**Q2d** 
+
+```{r q2d, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# this code is given
+dl <- dl %>%
+  mutate(lfbZnorm = (lfb - mean(lfb))/sd(lfb),
+         foxyZnorm = (foxy - mean(foxy))/sd(foxy))
+
+# any code goes here
+cor.test(dl$lfbZnorm,dl$foxyZnorm)
+```
+
+*ANSWER: The code calculates two new variables, "lfbZnorm" and "foxyZnorm", by standardizing the variables "lfb" and "foxy", respectively. Standardization transforms the variables into z-scores with a mean of 0 and a standard deviation of 1. This ensures that the variables are on a common scale, making them more comparable. While the process of standardization linearly transforms the variables, it does not change the correlation coefficient (0.85). The correlation coefficient is preserved because standardization preserves the relative relationships between the variables. Therefore, the correlation coefficient between "lfbZnorm" and "foxyZnorm" will be the same as the correlation coefficient between the original "lfb" and "foxy" variables. [Word Count: 103]*
+
+
+**Q2e**
+
+```{r q2e, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+model2_mod <- lm(lfbZnorm ~ foxyZnorm,data=dl)
+summary(model2_mod)
+```
+
+*ANSWER: In the standardized regression, the intercept is 0 and the slope is 0.85. These values differ from those in Q2b due to standardization. Standardization shifts the mean of both outcome and predictor variables to 0, which makes the intercept significantly smaller. The slope, which measures how the outcome variable changes with a one standard deviation change in the predictor variable, is equal to the correlation coefficient, since it quantifies the linear relationship between variables in terms of their standard deviations. [Word Count: 81]*
+
+
+## Q3
+
+**Q3a**
+
+```{r q3a, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# this code is given
+dcPlotTable <- dc %>%
+  group_by(year,crime) %>%
+  summarise(n = n()) %>%
+  ungroup()
+
+# any code goes here
+dcPlotTable %>%
+  ggplot(mapping=aes(x=n,y=year)) +
+  geom_col(aes(fill=crime),colour="black") +
+  theme_bw() +
+  scale_fill_brewer(palette="Set1") +
+  labs(title = "Frequency of crimes of each type", x="n", y="year") +
+  theme(axis.text.y = element_text(angle=90, vjust=0.5, hjust=1))
+```
+
+
+**Q3b**
+
+```{r q3b, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+currentTibble <- dc %>%
+  filter(year == "current") 
+
+currentTable <- table(currentTibble$crime)
+currentTable
+chisq.test(x=currentTable, p=rep(1/4,4))
+```
+
+*ANSWER: We used a chi-squared goodness of fit test to examine whether the number of thefts in the food category significantly differs from the other categories in the current year. We found significant deviations, X2(3)=174.95, p<.0001. This suggests that the distribution of thefts across categories is not uniform, with food experiencing a significantly higher number of thefts compared to other categories.  [Word Count: 65]*
+
+
+**Q3c** 
+
+```{r q3c, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+crimeTable <- table(dc$year,dc$crime)
+ctResult <- chisq.test(crimeTable)
+ctResult
+```
+
+*ANSWER: To compare the distribution of thefts between the current and previous year, we ran a Chi-squared test of independence. The results were significant, X2(3)=8.72, p=.033, suggesting that the distribution of thefts has significantly changed from the previous year to the current year.  [Word Count: 47]*
+
+
+**Q3d**
+
+```{r q3d, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+ctResult$stdres
+```
+
+*ANSWER: The adjusted residuals of food is greater than the rule of thumb of 2, suggesting that food crime is significantly different between the current and the previous year. While the adjusted residuals of tech, vehicles and other are less than the rule of thumb of 2, indicating that these crime types are not significantly different between the current and the previous year.  [Word Count: 62]*
+
+
+## Q4
+
+```{r q4fig, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# plot the figure 
+dfLong <- df %>%
+  pivot_longer(cols=c(previous,current),names_to="year",
+               values_to="price")
+dfLong$year <- factor(dfLong$year,
+                      levels=c("previous","current"))
+
+dfSum <- dfLong %>%
+  group_by(year) %>%
+  summarise(mean=mean(price),
+            sd=sd(price),
+            n=n(),
+            sdErr=sd/sqrt(n)) %>%
+  ungroup()
+
+dfLong %>%
+  ggplot(mapping=aes(y=price,x=year,colour=year)) +
+  geom_path(aes(group=names),colour="grey",
+            linewidth=0.3) +
+  geom_jitter(alpha=0.4,size=3,width=0.02,height=0) +
+  geom_errorbar(data=dfSum,width=0.15,
+                colour="black",
+                mapping=aes(y=mean,
+                            ymin = mean-sdErr,
+                            ymax = mean+sdErr)) +
+  theme_bw() +
+  theme(legend.position="none") +
+  scale_fill_brewer(palette="Set1") +
+  scale_colour_brewer(palette="Set1") +
+  labs(title="Price change over time",
+       subtitle="Each dot is one kind of food item",
+       y="Average price", x="Year")
+```
+
+**Q4a**
+
+```{r q4a, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+shapiro.test(df$previous-df$current)
+```
+
+*ANSWER: A Shapiro-Wilk test assessed the assumption of normality for the difference of "previous" and "current" variables, since we are doing a paired-sample t-test. Results were not significant, W=0.98, p=.122, so normality assumptions are not violated for either year. [Word Count: 41]*
+
+
+**Q4b**
+
+```{r q4b, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+t.test(x=df$previous,y=df$current,paired=TRUE)
+cohensD(x=df$previous,y=df$current,method="paired")
+```
+
+*ANSWER: To analyze the change in food prices between the previous and current years, a paired t-test was conducted. This test is suitable as it compares the means of two related groups (previous and current year prices for the same food items) to ascertain any significant difference. The predictor variables are the prices of the food items in the previous and current years, and the outcome variable is the difference in prices between these two time periods. The difference between the groups was significant, t(79)=-3.01, p=.003, with a mean difference of -1.386. Moreover, the calculated effect size of 0.337 was considered as a medium effect, suggesting a moderate change in food prices between the previous and current years.  [Word Count: 123]*
+
+
+## Q5
+
+**Q5a**
+
+```{r q5a, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+dh_sum <- dh %>%
+  group_by(inCat,exCat) %>%
+  summarise(mean = mean(health),
+            sd = sd(health),
+            n = n(),
+            sderr = sd/sqrt(n)) %>%
+  ungroup()
+
+dh_sum %>%
+  ggplot(mapping = aes(x=inCat, y=mean, fill=exCat)) +
+  geom_jitter(data=dh,mapping=aes(x=inCat,y=health,colour=exCat),alpha=0.7,show.legend=FALSE) +
+  geom_col(colour="black",position="dodge",show.legend=FALSE,alpha=0.5) +
+  geom_errorbar(mapping=aes(ymin = mean-sderr, ymax=mean+sderr),width=0.2) +
+  facet_wrap(~exCat) +
+  theme_bw() +
+  scale_fill_brewer(palette="Set1") +
+  scale_colour_brewer(palette="Set1") +
+  labs(x="Income Category", y="Average Health Rating", fill="Exercise Category")
+```
+
+
+**Q5b**
+
+```{r q5b, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+model3 <- aov(health ~ inCat + exCat + inCat:exCat, data=dh)
+summary(model3)
+```
+
+*ANSWER: A two-way ANOVA test was utilized to assess the effect of two predictor variables, income category "inCat" (with poor and rich levels) and exercise category "exCat" (with low and high levels), on an outcome variable, health rating. The results showed a significant main effect on inCat, F(1,116)=35.47, p<.0001, indicating that inCat was a significantly predicted health rating. Additionally, a significant interaction effect between inCat and exCat was observed, F(1,116)=15.08, p<.001, suggesting that the effect of inCat on health rating depended on the exCat. However, there was no significant effect on exCat alone, F(1,116)=0.16, p=.694, suggesting that exCat was not a significant predictor of health rating. These findings suggested that income category and its interaction with exercise category were significant factors predicting health ratings, while exercise category alone was not a significant predictor.  [Word Count: 147]*
+
+
+## Q6
+
+**Q6a**
+
+```{r q6a, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+model4 <- lm(health ~ income + exercise, data=dh)
+summary(model4)
+```
+
+*ANSWER: Multiple linear regression was used to evaluate a linear model with the outcome variable being the health rating, and with two predictors: the income of the person and the average amount of exercise each person got (reflected in the average calories burnt through exercise per day). The overall model was statistically significant, F(2,117)=10.65, p<.0001, with an effect size of 0.154, accounting for 15.4% of the variance in health. Income was a significant predictor: t(117)=4.52, p<.0001, with a slope of 0.38, suggesting that each additional unit of income resulted in an additional 0.38 units of health rating. However, exercise was not significant: t(117)= -1.05, p=.296, with a slope of -0.007, suggesting that an increase in calories burnt through exercise of 1kCal resulted in a decrease of 0.007 units of health rating. [Word Count: 148]*
+
+
+**Q6b**
+
+```{r q6b, warning=FALSE, message=FALSE, fig.width=5, fig.height=5}
+# any code goes here
+model5 <- lm(health ~ income + exercise + income:exercise, data=dh)
+summary(model5)
+```
+
+*ANSWER: (i) The intersection of both income and exercise was significant: t(116)=7.13, p<.0001, with a slope of 0.002, suggesting that there was an increase in health rating of 0.002 if both income and exercise increase by 1 OR both decrease by 1; (ii) The effect size of this model including an intersection term is 0.412, suggesting that both income and exercise together account for 41.2% of the variance in health. This means that the model including the interaction term fits the data better, as it explains a larger proportion of the variance in health; (iii) The unstandardized coefficient for income has decreased from 0.38 to -0.724, and that for exercise has decreased from -0.007 to -0.195. The reason for these changes is the inclusion of the interaction term with a small coefficient, suggesting that income and exercise are dependent on each other. [Word Count: 150]*
+
+
+**Q6c**
+
+*ANSWER: The analysis in Q5b and Q6b yielded different qualitative conclusions about the factors significantly associated with health rating. In terms of the output, the ANOVA in Q5b identified income category and its interaction with exercise category as significant predictors. However, the linear regression in Q6b found income, exercise, and the interaction of income and exercise, all these three factors significant. This discrepancy can be attributed to the variable types used in different statistical tests: Q5b uses categorical, while Q6b uses numerical variables. These differences in variable types lead to variations in analytical approaches, hence resulting in different conclusions.  [Word Count: 98]*
+
+
+## Q7
+
+**Q7a**
+
+*ANSWER: (i) Option B is not possible.  (ii) Option A is not possible.  (iii) Option A is not possible. *
+
+
+**Q7b**
+
+*ANSWER: (i) In a chi-square test, the test statistic is calculated by summing up the squared differences between the observed and expected values, which is always non-negative. Option B shows X2=-8.69 which is negative, and p=.013. Therefore, a negative value for the test statistic is not feasible. Moreover, larger values of the chi-square test statistic tend to correspond to smaller p-values, so option A is possible; (ii) In a t-test, the t-statistic measures the size of the difference relative to the variation in the data. The degrees of freedom, typically an integer, reflect the amount of independent information available for estimating variance. In Option A, t(161.2)=5.06 shows a fractional degrees of freedom, which is unusual as it’s typically an integer; (iii) The F-test checks for significant differences among the means of three or more independent groups. A larger F-statistic typically indicates a greater difference between groups, which would correspond to a smaller p-value. In option A, F(2,132)=0.85, p<.0001. We can see a small F-statistic combined with an extremely low p-value. Hence, option A is implausible.  [Word Count: 183]*
+
+
+## Q8
+
+*ANSWER: My favorite character in Bunnyland story is Foxy because Foxy is calm and smart.* 
+
